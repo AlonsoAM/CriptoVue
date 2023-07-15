@@ -10,11 +10,12 @@ const monedas = ref([
 ]);
 
 const criptomonedas = ref([]);
+const error = ref("");
 const cotizar = reactive({
   moneda: "",
   cripto: "",
 });
-const error = ref("");
+const cotizacion = ref({});
 
 onMounted(() => {
   const url =
@@ -36,7 +37,10 @@ const cotizarCripto = () => {
 const obtenerCotizacion = async () => {
   const { moneda, cripto } = cotizar;
   const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${cripto}&tsyms=${moneda}`;
-  console.log(url);
+  const resp = await fetch(url);
+  const data = await resp.json();
+  // console.log(data.DISPLAY[cripto][moneda]);
+  cotizacion.value = data.DISPLAY[cripto][moneda];
 };
 </script>
 
